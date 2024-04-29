@@ -1,6 +1,66 @@
-## pe*eps = price
+from scipy import stats
+import pandas as pd 
+import numpy as np
+
+# 單母體平均數 ：
+# Eps*本益比 /  當月平均
+
+# 單母體變異數：
+# 台股變異數 / 個股變異數
+
+# 雙母體平均：
+# 台積電 / 大盤
+
+
+# 雙母體變異：
+# 台股 / 美股 or 台積電/大盤
+
+###單母體平均數檢定
+######## pe*eps = price
 # 2023第四季 台積電
-pe10 =  14.48, pe11 = 16.41, pe12 = 16.80
+pe10 =  14.48
+pe11 = 16.41
+pe12 = 16.80
+pe = (pe10 + pe11 + pe12) / 3
 eps = 9.21
+
+price_2330_2023Q4 = pd.read_csv('台積電.csv')
+
+
+pvalue = stats.ttest_1samp(price_2330_2023Q4['當日均價(元)'],pe*eps,alternative='two-sided')[1]
+
+if pvalue < 0.05:
+    print(f'根據單母體平均數檢定台積電p value為{pvalue} 2023Q4跟用eps*本益比的股價 有顯著差異')
+    
+    
+###單母體變異數檢定
+# 台股變異數 / 0050個股變異數
+
+index_df = pd.read_csv('台指_報酬率.csv')
+index_df['日報酬率 %'] = index_df['日報酬率 %'].astype(float)*0.01
+
+index_var = index_df['日報酬率 %'].var()
+
+df_stock = pd.read_csv('0050_報酬率.csv')
+df_stock['日報酬率 %'] = df_stock['日報酬率 %'].astype(float)*0.01
+
+
+var_stock = df_stock['日報酬率 %'].var(ddof=1)
+
+df = len(df_stock) - 1
+
+# 計算卡方
+chi_square = (df*var_stock)  /index_var
+
+# 計算p value
+pvalue = 1 - stats.chi2.cdf(chi_square,df)
+
+
+if pvalue < 0.05:
+    print(f'根據單母體變異數檢定0050 p value為{pvalue}  有顯著差異')
+    
+
+#######################
+
 
 
