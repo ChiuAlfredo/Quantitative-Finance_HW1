@@ -61,6 +61,31 @@ if pvalue < 0.05:
     
 
 #######################
+# 雙母體平均數檢定
+index_df = pd.read_csv('台指_報酬率.csv')
+df_stock = pd.read_csv('0050_報酬率.csv')
 
+pvalue = stats.ttest_ind(index_df['日報酬率 %'],df_stock['日報酬率 %'],alternative='two-sided')[1]
 
+if pvalue < 0.05:
+    print(f'根據雙母體平均數數檢定0050 p value為{pvalue}  有顯著差異')
+else:
+    print(f'根據雙母體平均數數檢定0050 p value為{pvalue}  沒有顯著差異')
+    
+#######################
+# 雙母體變異數檢定
+index_df = pd.read_csv('台指_報酬率.csv')
+df_stock = pd.read_csv('0050_報酬率.csv')
+f_statistic, p_value = stats.f_oneway(index_df['日報酬率 %'], df_stock['日報酬率 %'])
+
+# 輸出結果
+print("F Statistic:", f_statistic)
+print("P-value:", p_value)
+
+# 檢定
+alpha = 0.05
+if p_value < alpha:
+    print(f"在信心水準 {alpha} 下，拒绝原假設，即两组样本具有不同的變異數。" )
+else:
+    print(f"在信心水準 {alpha} 下，接受原假設，即两组样本具有相同的變異數。" )
 
