@@ -27,10 +27,10 @@ eps = 9.21
 price_2330_2023Q4 = pd.read_csv('台積電.csv')
 
 
-t,pvalue,df = stats.ttest_1samp(price_2330_2023Q4['當日均價(元)'],pe*eps,alternative='two-sided')
+result = stats.ttest_1samp(price_2330_2023Q4['當日均價(元)'],pe*eps,alternative='two-sided')
 
-print("t Statistic:", t)
-print("P-value:", pvalue)
+print("t Statistic:", result[0])
+print("P-value:", result[1])
 
 if pvalue < 0.05:
     print(f'根據單母體平均數檢定台積電p value為{pvalue} 2023Q4跟用eps*本益比的股價 有顯著差異')
