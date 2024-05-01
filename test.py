@@ -28,7 +28,7 @@ price_2330_2023Q4 = pd.read_csv('台積電.csv')
 
 
 result = stats.ttest_1samp(price_2330_2023Q4['當日均價(元)'],pe*eps,alternative='two-sided')
-
+pvalue = result[1]
 print("t Statistic:", result[0])
 print("P-value:", result[1])
 
