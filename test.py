@@ -27,11 +27,15 @@ eps = 9.21
 price_2330_2023Q4 = pd.read_csv('台積電.csv')
 
 
-pvalue = stats.ttest_1samp(price_2330_2023Q4['當日均價(元)'],pe*eps,alternative='two-sided')[1]
+t,pvalue = stats.ttest_1samp(price_2330_2023Q4['當日均價(元)'],pe*eps,alternative='two-sided')
+
+print("t Statistic:", t)
+print("P-value:", pvalue)
 
 if pvalue < 0.05:
     print(f'根據單母體平均數檢定台積電p value為{pvalue} 2023Q4跟用eps*本益比的股價 有顯著差異')
-    
+else:
+    print(f'根據單母體平均數檢定台積電p value為{pvalue} 2023Q4跟用eps*本益比的股價 沒有顯著差異')
     
 ###單母體變異數檢定
 # 台股變異數 / 0050個股變異數
@@ -54,18 +58,23 @@ chi_square = (df*var_stock)  /index_var
 
 # 計算p value
 pvalue = 1 - stats.chi2.cdf(chi_square,df)
-
+ 
+print("x2 Statistic:", chi_square)
+print("P-value:", pvalue)
 
 if pvalue < 0.05:
     print(f'根據單母體變異數檢定0050 p value為{pvalue}  有顯著差異')
-    
-
+else:
+    print(f'根據單母體變異數檢定0050 p value為{pvalue}  沒有顯著差異')
 #######################
 # 雙母體平均數檢定
 index_df = pd.read_csv('台指_報酬率.csv')
 df_stock = pd.read_csv('0050_報酬率.csv')
 
-pvalue = stats.ttest_ind(index_df['日報酬率 %'],df_stock['日報酬率 %'],alternative='two-sided')[1]
+t,pvalue = stats.ttest_ind(index_df['日報酬率 %'],df_stock['日報酬率 %'],alternative='two-sided')[1]
+
+print("t Statistic:", t)
+print("P-value:", pvalue)
 
 if pvalue < 0.05:
     print(f'根據雙母體平均數數檢定0050 p value為{pvalue}  有顯著差異')
@@ -85,7 +94,7 @@ print("P-value:", p_value)
 # 檢定
 alpha = 0.05
 if p_value < alpha:
-    print(f"在信心水準 {alpha} 下，拒绝原假設，即两组样本具有不同的變異數。" )
+    print(f"在信心水準 {alpha} 下，拒绝0050跟大盤的雙母體變異數檢定。" )
 else:
-    print(f"在信心水準 {alpha} 下，接受原假設，即两组样本具有相同的變異數。" )
+    print(f"在信心水準 {alpha} 下，不拒絕0050跟大盤的雙母體變異數檢定。。" )
 
