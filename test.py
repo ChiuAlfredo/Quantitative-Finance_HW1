@@ -71,10 +71,11 @@ else:
 index_df = pd.read_csv('台指_報酬率.csv')
 df_stock = pd.read_csv('0050_報酬率.csv')
 
-t,pvalue = stats.ttest_ind(index_df['日報酬率 %'],df_stock['日報酬率 %'],alternative='two-sided')[1]
+result = stats.ttest_ind(index_df['日報酬率 %'],df_stock['日報酬率 %'],alternative='two-sided')
 
-print("t Statistic:", t)
-print("P-value:", pvalue)
+pvalue = result[1]
+print("t Statistic:", result[0])
+print("P-value:", result[1])
 
 if pvalue < 0.05:
     print(f'根據雙母體平均數數檢定0050 p value為{pvalue}  有顯著差異')
